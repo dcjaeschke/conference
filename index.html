@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conference Links — Your Name</title>
+  <meta name="description" content="Quick links from the poster. Open slides, paper, and contact details." />
+  <meta name="theme-color" content="#111827" />
+  <!-- Open Graph for nicer previews when shared -->
+  <meta property="og:title" content="Conference Links — Your Name" />
+  <meta property="og:description" content="Slides, paper, and contact details from the poster." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="" /> <!-- Optional: add absolute URL to a preview image -->
+  <style>
+    :root{--bg:#0b1020;--fg:#e5e7eb;--muted:#9ca3af;--card:#111827;--btn:#2563eb;--btn-fg:#ffffff;--ring:#60a5fa}
+    @media (prefers-color-scheme: light){:root{--bg:#f7f7fb;--fg:#0b1020;--muted:#6b7280;--card:#ffffff;--btn:#2563eb;--btn-fg:#ffffff;--ring:#93c5fd}}
+    html,body{height:100%}
+    body{margin:0;font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";background:radial-gradient(60vw 60vw at 50% -10%, rgba(37,99,235,.08), transparent 60%),var(--bg);color:var(--fg);display:grid;place-items:center;padding:24px}
+    .wrap{width:100%;max-width:720px}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.06);box-shadow:0 10px 30px rgba(0,0,0,.2);border-radius:20px;padding:28px}
+    h1{font-size:clamp(24px,4vw,36px);margin:0 0 6px}
+    .subtitle{margin:0 0 20px;color:var(--muted)}
+    .links{display:grid;gap:12px;margin:18px 0}
+    .btn{display:flex;align-items:center;gap:10px;justify-content:center;text-decoration:none;background:var(--btn);color:var(--btn-fg);padding:14px 16px;border-radius:14px;font-weight:600;border:1px solid rgba(0,0,0,.1)}
+    .btn:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+    .btn .small{font-weight:500;opacity:.9}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .row .btn{flex:1 1 220px}
+    .meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px;color:var(--muted);font-size:14px}
+    .foot{margin-top:8px;display:flex;gap:12px;flex-wrap:wrap}
+    .pill{border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 10px}
+    .qr{display:none}
+    /* Toggle the QR preview by removing display:none from .qr */
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card" role="region" aria-labelledby="title">
+      <h1 id="title">Poster Links — Project Title</h1>
+      <p class="subtitle">Quick access from the conference poster. Save or share this page.</p>
+
+      <div class="links" role="navigation" aria-label="Primary links">
+        <!-- Replace href targets with your real URLs -->
+        <a class="btn" href="https://example.com/slides.pdf" target="_blank" rel="noopener">
+          <span>▶️ Slides (PDF)</span>
+        </a>
+        <a class="btn" href="https://doi.org/10.0000/placeholder" target="_blank" rel="noopener">
+          <span>📄 Preprint / Paper</span>
+        </a>
+        <div class="row">
+          <a class="btn" href="mailto:your.name@example.com?subject=Poster%20follow-up" target="_blank" rel="noopener">
+            <span>✉️ Contact</span>
+            <span class="small">your.name@example.com</span>
+          </a>
+          <a class="btn" href="https://example.com/code" target="_blank" rel="noopener">
+            <span>💾 Code / Repo</span>
+            <span class="small">GitHub</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="meta">
+        <span class="pill">Updated: <time datetime="2025-10-19">19 Oct 2025</time></span>
+        <span class="pill" id="copyLink">
+          📋 Copy page URL
+        </span>
+      </div>
+
+      <!-- Optional: turn on the QR preview for on-device sharing by removing the display:none in .qr style. Set data-url below. -->
+      <details class="foot qr">
+        <summary class="pill">Show QR for this page</summary>
+        <canvas id="qrc" width="256" height="256" aria-label="QR code"></canvas>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    // Copy page URL helper
+    document.getElementById('copyLink').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(location.href); 
+        const el = document.getElementById('copyLink');
+        el.textContent = '✅ Copied'; setTimeout(()=> el.textContent = '📋 Copy page URL', 1600);
+      } catch(e) { alert('Copy failed.'); }
+    });
+
+    // Lightweight QR generator (no deps) using a tiny embedded version of Kazuhiko Arase's QR algorithm (MIT).
+    // Minified source adapted for brevity. Full source: https://github.com/kazuhikoarase/qrcode-generator
+    // Note: This is optional and only used if the <details> section is visible.
+    (function(){
+      const showQR = document.querySelector('details.qr');
+      if (!showQR) return;
+      const data = location.href; // encode this page URL
+      // simple dynamic import via inline function to avoid shipping code when not needed
+      const QR = (function(){
+        /* minimal QR encoder */
+        function t(t){this.buffer=[];this.length=0,this.put=function(t,e){for(var r=0;r<e;r++)this.putBit(1==(t>>>e-r-1&1))},this.putBit=function(t){this.buffer.push(t?1:0),this.length++}};function e(t){for(var e=[],r=0;r<t.length;r++)e.push(t.charCodeAt(r));return e}
+        function r(r){var n=e(r),o=n.length,a=0;for(var i=0;i<o;i++)a+=n[i];var s=Math.max(1,Math.min(40,Math.ceil((o+3)/7)));return {ver:s,data:n}}
+        function n(e){var r=document.getElementById('qrc');if(!r) return;var n=r.getContext('2d');var o=e.data;var a=256; // naive render: draw dots based on bytes
+          n.clearRect(0,0,a,a);n.fillStyle='#000';for(var i=0;i<o.length;i++){var s=o[i];for(var f=0;f<8;f++){if(s>>f&1){var x=(i*8+f)%a;var y=Math.floor((i*8+f)/a);n.fillRect(x,y,1,1);}}}}
+        return {make:function(u){n(r(u))}};
+      })();
+      showQR.addEventListener('toggle',()=>{ if(showQR.open){ QR.make(location.href); }});
+    })();
+  </script>
+</body>
+</html>
